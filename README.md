@@ -26,15 +26,38 @@ Every block, transaction, and calculation not only secures the chain but also co
 - Base token: **atmo**
 - Total supply: **100,000,000 ATMO (fixed)**
 
----
-!!! genesis.json 
+** Linux / macOS**
 ```bash
-wget https://raw.githubusercontent.com/<org>/<repo>/main/networks/genesis.json -O ~/.atmo/config/genesis.json
+mkdir -p ~/.atmod/config
+wget -O ~/.atmod/config/genesis.json https://raw.githubusercontent.com/SerhiiVozniuk-ua/atmochain/main/networks/genesis.json
+# or:
+curl -L https://raw.githubusercontent.com/SerhiiVozniuk-ua/atmochain/main/networks/genesis.json -o ~/.atmod/config/genesis.json
 
 ```
-### 🚀 Installation & Run
+## Windows (PowerShell)
+```bash
 
-#### Linux (Ubuntu)
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.atmod\config" | Out-Null
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SerhiiVozniuk-ua/atmochain/main/networks/genesis.json" -OutFile "$env:USERPROFILE\.atmod\config\genesis.json"
+
+```
+## Quick start with scripts
+
+### Linux / macOS
+```bash
+
+curl -fsSL https://raw.githubusercontent.com/SerhiiVozniuk-ua/atmochain/main/scripts/join.sh | bash
+```
+### Windows (PowerShell)
+```bash
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+iwr https://raw.githubusercontent.com/SerhiiVozniuk-ua/atmochain/main/scripts/join.ps1 -UseBasicParsing | iex
+```
+
+## 🚀 Build from source
+
+### Linux (Ubuntu)
 ```bash
 sudo apt update
 sudo apt install -y golang-go make git jq
@@ -44,49 +67,37 @@ cd atmochain
 
 go build -ldflags="-checklinkname=0" -o atmod ./cmd/atmod
 
-./atmod init mynode --chain-id atmochain
-
-jq '.app_state.staking.params.bond_denom="atmo"
-  | .app_state.mint.params.mint_denom="atmo"
-  | .app_state.gov.params.min_deposit[0].denom="atmo"
-  | .app_state.gov.params.expedited_min_deposit[0].denom="atmo"' \
-  ~/.atmo/config/genesis.json > /tmp/genesis.fixed && mv /tmp/genesis.fixed ~/.atmo/config/genesis.json
-
-./atmod keys add alice
-./atmod keys add bob
-
-./atmod genesis add-genesis-account alice 100000000atmo
-./atmod genesis add-genesis-account bob   100000000atmo
-
-./atmod genesis gentx alice 50000000atmo --chain-id atmochain
-
-./atmod genesis collect-gentxs
-./atmod genesis validate-genesis
-
 ./atmod start --minimum-gas-prices="0.00001atmo"
+
 ```
+## Windows
+### Install Go
 
----
+Download Go from the official website: https://go.dev/dl/
+.
 
-#### Windows
+Install it (default location: C:\Program Files\Go).
+
+During installation, make sure "Add to PATH" is checked.
+If not, add C:\Program Files\Go\bin manually to PATH.
+
+### Build and Run
 ```bash
-
-####  Install Go
-1. Download Go from the official website: [https://go.dev/dl/](https://go.dev/dl/).
-2. Install it (default location: `C:\Program Files\Go`).
-3. During installation, make sure **"Add to PATH"** is checked.  
-
 
 cd "C:\Users\Admin\OneDrive\Desktop\atmochain"
 go build -ldflags="-checklinkname=0" -o atmod.exe ./cmd/atmod
 
+# Initialize node home
+.\atmod.exe init win-node --chain-id atmochain --home C:\atmo
 
-.\atmod.exe start --minimum-gas-prices="0.00001atmo"
+# Copy genesis.json as described above into C:\atmo\config\genesis.json
+
+# Start node
+.\atmod.exe start --home C:\atmo --minimum-gas-prices="0.00001atmo"
 ```
----
 
+## ⚖️ Run Validator
 
-#### Run Validator
 ```bash
 ./atmod tx staking create-validator \
   --amount=50000000atmo \
@@ -99,10 +110,9 @@ go build -ldflags="-checklinkname=0" -o atmod.exe ./cmd/atmod
   --min-self-delegation=1
 
 ```
----
 
 
-###🗺 Roadmap
+### 🗺 Roadmap
 
 Q3 2025 — Whitepaper + PoUW prototype
 
@@ -115,7 +125,7 @@ Dec 2025 — IPFS integration, first clients, exchange listing
 ---
 
 
-###⚠️ Disclaimer
+### ⚠️ Disclaimer
 
 ATMO is a utility token, not a security.
 Running nodes is your own responsibility.
@@ -123,7 +133,7 @@ Running nodes is your own responsibility.
 
 ---
 
-🇺🇦 Українською
+# 🇺🇦 Українською
 
 AtmoChain (ATMO) — це блокчейн на базі Cosmos SDK із консенсусом Proof-of-Useful-Work (PoUW).
 Мета — використовувати обчислювальну потужність для корисних завдань у реальному житті: кліматичне моделювання, біологія, дослідження AI.
@@ -131,7 +141,7 @@ AtmoChain (ATMO) — це блокчейн на базі Cosmos SDK із кон�
 ---
 
 
-###🌍 Місія
+### 🌍 Місія
 
 Atmo поєднує блокчейн і науку.
 Кожен блок, транзакція і обчислення не лише підтримують мережу, а й служать розвитку людства.
@@ -147,7 +157,7 @@ Atmo поєднує блокчейн і науку.
 ---
 
 
-###⚙️ Технічні характеристики
+### ⚙️ Технічні характеристики
 
 Cosmos SDK v0.53.3
 
@@ -160,7 +170,7 @@ Cosmos SDK v0.53.3
 
 ---
 
-###🗺 Дорожня карта
+### 🗺 Дорожня карта
 
 Q3 2025 — Whitepaper + прототип PoUW
 
@@ -172,7 +182,7 @@ Q3 2025 — Whitepaper + прототип PoUW
 
 ---
 
-###⚠️ Дисклеймер
+### ⚠️ Дисклеймер
 
 ATMO — це utility token, а не цінний папір.
 Запуск вузлів здійснюється на ваш власний ризик.
